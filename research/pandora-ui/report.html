@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<title>Pandora Report</title>
+<style>
+  :root{--navy:#111827;--mid:#4B5563;--grey:#9CA3AF;--line:#E5E7EB;--bg:#EEF1F5;--blue:#3B5FBF;--card:#fff}
+  *{box-sizing:border-box}
+  body{margin:0;width:1600px;height:1000px;background:#D9DEE6;font-family:Inter,"Noto Sans TC","PingFang TC",sans-serif;color:var(--navy);
+    display:flex;align-items:center;justify-content:center}
+  .win{width:1520px;height:930px;background:var(--bg);border-radius:14px;overflow:hidden;box-shadow:0 30px 70px rgba(17,24,39,.25);display:flex;flex-direction:column}
+  .chrome{height:44px;background:#F8F9FB;border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 18px;gap:8px}
+  .dot{width:12px;height:12px;border-radius:50%}
+  .url{margin-left:24px;flex:1;max-width:620px;height:26px;border-radius:13px;background:#fff;border:1px solid var(--line);font-size:13px;color:var(--mid);display:flex;align-items:center;padding:0 14px}
+  .nav{height:58px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 32px}
+  .logo b{display:block;font-weight:900;font-size:24px;letter-spacing:.01em;line-height:1}
+  .logo span{display:block;font-weight:800;font-size:9px;letter-spacing:.04em;color:#374151}
+  .tabs{margin-left:48px;display:flex;gap:6px}
+  .tabs a{font-size:14px;color:var(--mid);padding:8px 14px;border-radius:8px;text-decoration:none}
+  .tabs a.on{background:#EEF2FF;color:var(--blue);font-weight:700}
+  .nav .r{margin-left:auto;display:flex;gap:10px;align-items:center}
+  .chip{font-size:12px;border:1px solid var(--line);border-radius:14px;padding:4px 12px;color:var(--mid);background:#fff}
+  .chip.on{background:var(--blue);color:#fff;border-color:var(--blue)}
+  .main{flex:1;padding:26px 36px;overflow:hidden}
+  .eyebrow{font-size:12px;font-weight:700;letter-spacing:.18em;color:var(--blue)}
+  h1{font-size:34px;font-weight:900;margin:8px 0 4px;letter-spacing:-.01em}
+  .sub{font-size:14px;color:var(--grey)}
+  .grid{display:grid;gap:18px;margin-top:20px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px}
+  .ch{display:flex;justify-content:space-between;font-size:13px;font-weight:700;letter-spacing:.06em;color:#374151;margin-bottom:12px}
+  .ch i{font-style:normal;font-weight:400;color:var(--grey)}
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:18px 22px}
+  .stat{border-top:2px solid var(--navy);padding-top:8px}
+  .stat b{font-size:30px;font-weight:900;letter-spacing:-.02em}
+  .stat span{display:block;font-size:12px;color:var(--mid);margin-top:2px}
+  .bars .row{display:flex;align-items:center;gap:10px;margin:9px 0;font-size:13px}
+  .bars .row span{width:78px;color:var(--mid)}
+  .bars .row div{height:14px;border-radius:7px;background:var(--blue)}
+  .bars .row em{font-style:normal;font-weight:700;font-size:13px}
+  .post{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);font-size:13px}
+  .post:last-child{border:0}
+  .post .av{width:30px;height:30px;border-radius:50%;background:#E0E7FF;flex:none}
+  .post p{margin:2px 0 0;color:var(--mid);line-height:1.5}
+  .post .m{font-size:12px;color:var(--grey);margin-top:4px}
+  .tm{display:grid;grid-template-columns:2.4fr 1.4fr 1fr;grid-template-rows:1fr 1fr;gap:6px;height:300px}
+  .tm div{border-radius:6px;display:flex;flex-direction:column;justify-content:center;align-items:center;font-weight:700;font-size:15px;color:#1F2937}
+  .tm div small{font-weight:400;font-size:12px;opacity:.8}
+  .note{font-size:11px;color:var(--grey);margin-top:10px}
+  .ai{background:#F8FAFF;border:1px solid #DCE4FB}
+  .ai p{font-size:14px;line-height:1.75;color:#1F2937;margin:6px 0}
+  .tagrow{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+  .tagrow span{font-size:12px;border:1px solid var(--line);border-radius:14px;padding:4px 10px;color:var(--mid);background:#fff}
+</style>
+</head>
+<body>
+<div class="win">
+  <div class="chrome"><span class="dot" style="background:#FF5F57"></span><span class="dot" style="background:#FEBC2E"></span><span class="dot" style="background:#28C840"></span>
+    <div class="url" id="url"></div></div>
+  <div class="nav">
+    <div class="logo"><b>PANDORA</b><span>BY THE POCKET COMPANY</span></div>
+    <div class="tabs" id="tabs"></div>
+    <div class="r"><span class="chip on">台灣</span><span class="chip">日本</span><span class="chip">2026-06-15 — 2026-11-01</span></div>
+  </div>
+  <div class="main" id="main"></div>
+</div>
+<script>
+const S = JSON.parse(`__STATS__`);
+const view = location.hash.slice(1) || 'volume';
+const fmt = n => n.toLocaleString();
+document.getElementById('tabs').innerHTML = ['Volume','Insight','Threads Trends','Culture Listening']
+  .map((t,i)=>`<a class="${(view==='volume'&&i===0)||(view==='insight'&&i===1)?'on':''}">${t}</a>`).join('');
+
+function lineChart(weekly, w, h) {
+  const max = Math.max(...weekly.map(x=>x[1])), n = weekly.length;
+  const pts = weekly.map((x,i)=>[30 + i*(w-50)/(n-1), h-28 - (x[1]/max)*(h-50)]);
+  const d = pts.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' ');
+  const area = d + ` L${pts[n-1][0]} ${h-28} L${pts[0][0]} ${h-28} Z`;
+  const grid = [0,.25,.5,.75,1].map(k=>`<line x1="30" x2="${w-20}" y1="${h-28-k*(h-50)}" y2="${h-28-k*(h-50)}" stroke="#EEF0F3"/>`).join('');
+  const labels = weekly.filter((x,i)=>i%4===0).map((x,j)=>`<text x="${30 + j*4*(w-50)/(n-1)}" y="${h-8}" font-size="11" fill="#9CA3AF">${x[0].slice(5)}</text>`).join('');
+  return `<svg width="${w}" height="${h}">${grid}<path d="${area}" fill="rgba(59,95,191,.10)"/><path d="${d}" fill="none" stroke="#3B5FBF" stroke-width="2.5"/>
+    ${pts.map(p=>`<circle cx="${p[0]}" cy="${p[1]}" r="2.6" fill="#3B5FBF"/>`).join('')}${labels}</svg>`;
+}
+
+if (view === 'volume') {
+  const d = S.dept;
+  document.getElementById('url').textContent = 'pandora.thepocket.company/report/volume?q=阪急|阪神';
+  const plats = d.plat.slice(0,5), pm = plats[0][1];
+  document.getElementById('main').innerHTML = `
+    <div class="eyebrow">01 / VOLUME REPORT</div>
+    <h1>阪急｜阪神 × 台灣社群聲量</h1>
+    <div class="sub">關鍵字：阪急、阪神（日本百貨 × 退稅／折扣／優惠／戰利品查詢子集）　平台：Threads・Instagram・PTT・Dcard・FB</div>
+    <div class="grid" style="grid-template-columns:1fr 1.25fr">
+      <div class="card"><div class="ch">基本統計<i>2026-06-15 — 2026-11-01</i></div>
+        <div class="stats">
+          <div class="stat"><b>${fmt(d.sub.n)}</b><span>總文章數</span></div>
+          <div class="stat"><b>${fmt(d.sub.likes)}</b><span>總按讚數</span></div>
+          <div class="stat"><b>${fmt(d.sub.comments)}</b><span>總留言數</span></div>
+          <div class="stat"><b>${d.sub.avg_likes}</b><span>平均按讚數</span></div>
+          <div class="stat"><b>${d.sub.avg_com}</b><span>平均留言數</span></div>
+          <div class="stat"><b>${fmt(d.sub.volume)}</b><span>總聲量</span></div>
+        </div></div>
+      <div class="card"><div class="ch">聲量趨勢分析<i>每週文章數</i></div>${lineChart(d.weekly, 760, 230)}</div>
+    </div>
+    <div class="grid" style="grid-template-columns:1fr 1.25fr">
+      <div class="card bars"><div class="ch">平台分布<i>文章數</i></div>
+        ${plats.map(p=>`<div class="row"><span>${p[0]==='instagram'?'Instagram':p[0]==='threads'?'Threads':(p[0]==='ptt'?'PTT':p[0]==='fb'?'FB':'Dcard')}</span><div style="width:${Math.max(4,p[1]/pm*300)}px"></div><em>${fmt(p[1])}</em></div>`).join('')}
+      </div>
+      <div class="card"><div class="ch">熱門文章<i>依瀏覽／互動排序</i></div>
+        <div class="post"><div class="av"></div><div><b>@osaka_rental_car</b>　Threads<p>去大阪真的拜託你們直接衝阪急百貨 B1！不要再只去心齋橋跟人家擠了…</p><div class="m">97,600 瀏覽　·　2026-08-26</div></div></div>
+        <div class="post"><div class="av"></div><div><b>@mani_tokyo_go</b>　Threads<p>大阪梅田高效購物攻略：阪急百貨（10:00-20:00）頂級精品 LV、Dior、Chanel…</p><div class="m">582 讚　·　2026-07-30</div></div></div>
+        <div class="post"><div class="av"></div><div><b>@linshibi</b>　Threads<p>日本 3COINS 退稅被收 5.7% 手續費…退 8~10% 的好日子已經過去了！</p><div class="m">521,000 瀏覽　·　2026-09-06</div></div></div>
+      </div>
+    </div>`;
+} else {
+  document.getElementById('url').textContent = 'pandora.thepocket.company/report/insight?q=阪急|阪神';
+  const sov = [['KKday',4691,'#3B5FBF'],['Klook',3511,'#7C93D8'],['雄獅旅遊',1682,'#F03742'],['可樂旅遊',974,'#B7C3E8'],['易遊網',559,'#D3DAF0'],['東南旅遊',83,'#E9EDF7']];
+  const tot = sov.reduce((a,b)=>a+b[1],0); let acc = 0;
+  const arcs = sov.map(s=>{const a0=acc/tot*2*Math.PI, a1=(acc+=s[1])/tot*2*Math.PI;
+    const r=92,R=[110,110], p=(a)=>[R[0]+r*Math.sin(a), R[1]-r*Math.cos(a)];
+    const [x0,y0]=p(a0),[x1,y1]=p(a1);
+    return `<path d="M${x0} ${y0} A${r} ${r} 0 ${a1-a0>Math.PI?1:0} 1 ${x1} ${y1}" stroke="${s[2]}" stroke-width="34" fill="none"/>`}).join('');
+  document.getElementById('main').innerHTML = `
+    <div class="eyebrow">02 / INSIGHT REPORT</div>
+    <h1>輿論的形狀：台灣人怎麼聊日本百貨</h1>
+    <div class="sub">阪急｜阪神子集 3,314 篇・話題分類為關鍵字規則統計；競品聲量取自品牌查詢 N=10,401（2025-11-01 — 2026-11-01）</div>
+    <div class="grid" style="grid-template-columns:1.45fr 1fr">
+      <div class="card"><div class="ch">關鍵字話題分析<i>篇數</i></div>
+        <div class="tm">
+          <div style="grid-row:1/3;background:#F6D36B">阪神虎・甲子園<small>969 篇</small></div>
+          <div style="grid-row:1/3;background:#7ED69A">B1 美食・伴手禮<small>444 篇</small></div>
+          <div style="background:#A9E2BB">精品・美妝<small>122 篇</small></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;background:none;padding:0;height:100%;align-items:stretch">
+            <div style="background:#F5A3A3">優惠・折扣<small>101</small></div><div style="background:#F28B8B">退稅・免稅<small>72</small></div></div>
+        </div>
+        <div class="note">色塊僅表話題類別，非情緒判定</div></div>
+      <div class="card"><div class="ch">競品聲量分布<i>日本相關討論</i></div>
+        <div style="display:flex;align-items:center;gap:22px">
+          <svg width="220" height="220">${arcs}<text x="110" y="104" text-anchor="middle" font-size="14" font-weight="700" fill="#111827">聲量分布</text><text x="110" y="126" text-anchor="middle" font-size="12" fill="#9CA3AF">N=${fmt(tot)}</text></svg>
+          <div style="font-size:13px;line-height:2">${sov.map(s=>`<div><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:${s[2]};margin-right:8px"></span>${s[0]}　<b>${fmt(s[1])}</b></div>`).join('')}</div>
+        </div></div>
+    </div>
+    <div class="grid" style="grid-template-columns:1fr">
+      <div class="card ai"><div class="ch">AI 洞察摘要<i>Pandora Agent 草稿・經騰雲人工複核</i></div>
+        <p>① 台灣社群談阪急阪神，入口是「阪神虎」與「B1 甜點伴手禮」，精品與退稅是購物決策的後段話題。</p>
+        <p>② 11/1 退稅新制上路前後，「退稅縮水」貼文單篇瀏覽破 52 萬，優惠資訊成為新的決策點。</p>
+        <p>③ 日本行程討論以 KKday、Klook 為主，雄獅在「落地後的購物」還沒有入口——這正是雙程票要補的位置。</p>
+        <div class="tagrow"><span>#阪急B1</span><span>#伴手禮</span><span>#阪神虎</span><span>#退稅新制</span><span>#梅田攻略</span><span>#95折卡</span></div>
+      </div>
+    </div>`;
+}
+</script>
+</body>
+</html>
