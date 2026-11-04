@@ -1,0 +1,24 @@
+# 系統／工具暫存
+.DS_Store
+.playwright-mcp/
+.wrangler/
+.claude/
+__pycache__/
+
+# 建置產物（可由腳本重建）
+render/
+dist/
+dl/
+assets/slides*/
+banner_tpl/_*.html
+
+# 含第三方金鑰的參考文件，不入庫
+research/turncloud-ref/SLIDE_FRAMEWORK.md
+
+# 金鑰
+.env
+*.env
+
+# Pandora 原始資料含大量第三方帳號與貼文，公開 repo 不放
+research/pandora-brand.json
+research/pandora-dept.json

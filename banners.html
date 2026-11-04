@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>雙程票 Banner 動態提案</title>
+<style>
+  :root{--red:#F03742;--orange:#FF8400;--ink:#1E1A1D;--mid:#6B6265;--line:#ECE6E7;--bg:#FFF8F6;
+    --lion:#1DB7D3;--tc:#FFC000;--dept:#C8102E}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans TC","PingFang TC","Hiragino Sans",sans-serif}
+  header{padding:56px 16px 24px;max-width:1240px;margin:0 auto}
+  .k{color:var(--red);font-weight:700;letter-spacing:.14em;font-size:13px}
+  h1{font-size:clamp(30px,5vw,52px);margin:10px 0 8px;line-height:1.15}
+  header p{color:var(--mid);font-size:16px;line-height:1.7;margin:0;max-width:720px}
+  nav{display:flex;gap:8px;flex-wrap:wrap;margin-top:22px}
+  nav a{font-size:14px;font-weight:700;text-decoration:none;color:var(--ink);background:#fff;border:1px solid var(--line);padding:7px 14px;border-radius:20px}
+  nav a:hover{border-color:var(--red);color:var(--red)}
+  section{max-width:1240px;margin:0 auto;padding:28px 16px}
+  h2{font-size:24px;margin:0 0 4px;display:flex;align-items:center;gap:10px}
+  h2 .pill{font-size:12px;color:#fff;padding:4px 10px;border-radius:12px}
+  .sub{color:var(--mid);margin:0 0 18px;font-size:15px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,540px),1fr));gap:22px}
+  .card{background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden}
+  .card video{display:block;width:100%;height:auto;background:#eee}
+  .meta{padding:14px 16px 16px}
+  .meta b{font-size:16px}
+  .meta .tag{display:inline-block;font-size:12px;font-weight:700;color:#fff;background:var(--red);padding:3px 9px;border-radius:10px;margin-right:8px;vertical-align:2px}
+  .meta p{margin:6px 0 0;color:var(--mid);font-size:14px;line-height:1.55}
+  .tall{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:22px}
+  /* 手機版位情境 */
+  .phones{display:flex;gap:28px;flex-wrap:wrap;justify-content:center}
+  .phone{width:300px;border-radius:40px;background:#111;padding:12px;box-shadow:0 20px 50px rgba(30,26,29,.25)}
+  .screen{border-radius:30px;overflow:hidden;background:#fff;height:600px;position:relative}
+  .bar{height:96px;background:var(--red);padding:44px 14px 0}
+  .bar div{background:#fff;border-radius:18px;height:34px;color:#999;font-size:13px;display:flex;align-items:center;padding:0 14px}
+  .icons{display:flex;justify-content:space-around;padding:12px 6px;font-size:11px;color:#555}
+  .icons span{display:flex;flex-direction:column;align-items:center;gap:4px}
+  .icons i{width:28px;height:28px;border-radius:8px;background:#F3EFEF}
+  .slot{margin:2px 12px 0;border-radius:12px;overflow:hidden;position:relative}
+  .slot video{display:block;width:100%}
+  .dots{display:flex;justify-content:center;gap:5px;margin:8px 0}
+  .dots i{width:6px;height:6px;border-radius:50%;background:#ddd}.dots i.on{background:var(--red);width:16px;border-radius:3px}
+  .list{padding:0 12px}
+  .list div{height:70px;border-radius:10px;background:#F6F2F2;margin-top:10px}
+  .lt .bar{background:linear-gradient(#FFE3EA,#fff);}
+  .lt .bar div{border:1px solid #F3D7DE}
+  .story{position:absolute;inset:0}
+  .story video{width:100%;height:100%;object-fit:cover}
+  .story .prog{position:absolute;top:10px;left:10px;right:10px;display:flex;gap:4px}
+  .story .prog i{flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,.45);overflow:hidden}
+  .story .prog i b{display:block;height:100%;width:0;background:#fff;animation:p 5s linear infinite}
+  .story .prog i:nth-child(2) b{animation:none}
+  @keyframes p{to{width:100%}}
+  .caption{text-align:center;font-size:14px;color:var(--mid);margin-top:12px;font-weight:700}
+  footer{max-width:1240px;margin:0 auto;padding:30px 16px 60px;color:var(--mid);font-size:13px;line-height:1.7}
+  footer a{color:var(--red)}
+</style>
+</head>
+<body>
+<header>
+  <div class="k">雙程票 ROUND TRIP PASS｜BANNER MOTION</div>
+  <h1>同一句「出發前，就是熟客。」<br>九種動態說法</h1>
+  <p>雄獅台灣版 App、LionTrip 國際版、百貨會員電子報的動態 Banner 提案。全部為 AI 示意，優惠內容與數字待三方確認。</p>
+  <nav><a href="#inapp">版位情境</a><a href="#outbound">去程・雄獅 App</a><a href="#season">檔期版</a><a href="#inbound">回程・日本側</a><a href="index.html">← 回簡報</a><a href="download/roundtrip-pass.pdf" download="雙程票_雄獅x日本百貨_騰雲提案.pdf">下載 PDF</a><a href="download/roundtrip-pass.pptx" download="雙程票_雄獅x日本百貨_騰雲提案.pptx">下載 PPT</a></nav>
+</header>
+
+<section id="inapp">
+  <h2>版位情境 <span class="pill" style="background:var(--ink)">IN-APP</span></h2>
+  <p class="sub">放進實際版位的樣子：首頁輪播、LionTrip 首頁、IG 限動。</p>
+  <div class="phones">
+    <div>
+      <div class="phone"><div class="screen">
+        <div class="bar"><div>搜尋國家、城市或景點</div></div>
+        <div class="icons"><span><i></i>團體</span><span><i></i>機票</span><span><i></i>訂房</span><span><i></i>自由行</span><span><i></i>票券</span></div>
+        <div class="slot"><video id="rot" src="assets/video/brand2/bn-clay.mp4" poster="assets/img/banners_v2/b2-clay.jpg" muted autoplay loop playsinline></video></div>
+        <div class="dots" id="dots"></div>
+        <div class="list"><div></div><div></div><div></div></div>
+      </div></div>
+      <div class="caption">雄獅台灣版｜首頁輪播（自動換檔）</div>
+    </div>
+    <div>
+      <div class="phone lt"><div class="screen">
+        <div class="bar"><div>次の旅をさがす</div></div>
+        <div class="icons"><span><i></i>鉄道旅</span><span><i></i>現地ツアー</span><span><i></i>海外旅行</span></div>
+        <div class="slot"><video src="assets/video/brand2/bn-jp.mp4" poster="assets/img/banners_v2/b8-jp-clay.jpg" muted autoplay loop playsinline></video></div>
+        <div class="list"><div></div><div></div><div></div><div></div></div>
+      </div></div>
+      <div class="caption">LionTrip 國際版｜首頁 Banner</div>
+    </div>
+    <div>
+      <div class="phone"><div class="screen">
+        <div class="story"><video src="assets/video/brand2/bn-story.mp4" poster="assets/img/banners_v2/b9-story.jpg" muted autoplay loop playsinline></video>
+          <div class="prog"><i><b></b></i><i><b></b></i><i><b></b></i></div></div>
+      </div></div>
+      <div class="caption">IG／LINE 限時動態 9:16</div>
+    </div>
+  </div>
+</section>
+
+<section id="outbound">
+  <h2>去程・雄獅台灣版 App <span class="pill" style="background:var(--lion)">21:9 輪播</span></h2>
+  <p class="sub">四個切角輪播測試，用點擊率決定主打。</p>
+  <div class="grid" data-set="out"></div>
+</section>
+<section id="season">
+  <h2>檔期版 <span class="pill" style="background:var(--red)">SEASONAL</span></h2>
+  <p class="sub">跟著阪神虎開季、櫻花季、出發前推播換臉。</p>
+  <div class="grid" data-set="season"></div>
+</section>
+<section id="inbound">
+  <h2>回程・日本側 <span class="pill" style="background:var(--dept)">JP</span></h2>
+  <p class="sub">LionTrip 的可愛黏土風，百貨會員報的沉穩明朝體。</p>
+  <div class="grid" data-set="in"></div>
+</section>
+
+<footer>騰雲 TurnCloud × 雄獅旅遊｜Confidential　·　影片與畫面皆為 AI 示意，非正式上刊素材。</footer>
+
+<script>
+const B = {
+  out: [
+    ["bn-clay.mp4", "b2-clay.jpg", "黏土微縮", "出發前，就是熟客。", "最可愛：把百貨做成玩具，小人進出百貨。"],
+    ["bn-tax.mp4", "b3-taxrefund.jpg", "退稅補給站", "退稅縮水？雄獅幫你補回來", "最即時：收據摺成紙飛機，接住 11/1 退稅新制。"],
+    ["bn-b1map.mp4", "b4-b1map.jpg", "B1 甜點地圖", "伴手禮 95折＋免稅", "最好逛：把網友攻略變成官方地圖，圖釘一個個跳出來。"],
+    ["bn-ticket.mp4", "b6-ticket.jpg", "雙程票", "台北 ⇄ 大阪，一張票買行程也買百貨", "最好懂：飛機劃過登機證，賣團順便賣券。"]],
+  season: [
+    ["bn-tigers.mp4", "b5-tigers.jpg", "阪神虎主場日", "虎迷限定 應援商品 95折", "棒球飛過虎紋，3 月開季檔期。"],
+    ["bn-sakura.mp4", "b7-sakura.jpg", "櫻花季", "櫻花季 先領券再出發", "花瓣飄落、路面電車經過，春假出發前推。"]],
+  in: [
+    ["bn-jp.mp4", "b8-jp-clay.jpg", "LionTrip 首頁", "台湾へ、ふらっと。", "黏土台灣小場景：小火車繞著台北 101 跑。"],
+    ["bn-square.mp4", "b10-jp-square.jpg", "百貨會員報 1:1", "台湾フェア、開催中。", "九份燈籠在圓窗裡搖曳，給百貨熟客的語氣。"]]
+};
+document.querySelectorAll('[data-set]').forEach(g => {
+  g.innerHTML = B[g.dataset.set].map(b => `<div class="card">
+    <video src="assets/video/brand2/${b[0]}" poster="assets/img/banners_v2/${b[1]}" muted autoplay loop playsinline preload="metadata"></video>
+    <div class="meta"><span class="tag">${b[2]}</span><b>${b[3]}</b><p>${b[4]}</p></div></div>`).join('');
+});
+// 首頁輪播自動換檔
+const rot = ["bn-clay.mp4", "bn-tax.mp4", "bn-b1map.mp4", "bn-ticket.mp4"];
+const rotP = ["b2-clay.jpg", "b3-taxrefund.jpg", "b4-b1map.jpg", "b6-ticket.jpg"];
+let r = 0; const v = document.getElementById('rot'), dots = document.getElementById('dots');
+const draw = () => dots.innerHTML = rot.map((_, i) => `<i class="${i === r ? 'on' : ''}"></i>`).join('');
+draw();
+setInterval(() => { r = (r + 1) % rot.length; v.poster = "assets/img/banners_v2/" + rotP[r]; v.src = "assets/video/brand2/" + rot[r]; v.play().catch(() => {}); draw(); }, 5000);
+</script>
+</body>
+</html>

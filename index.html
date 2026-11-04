@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>雙程票｜騰雲 × 雄獅 × 日本百貨</title>
+<style>
+  :root{
+    --bg:#1E1A1D; --red:#F03742; --orange:#FF8400; --gold:#FFD3A3;
+    --lion:#1DB7D3; --tc:#FFC000; --dept:#C8102E; --ink:#1A1A1A; --paper:#fff;
+  }
+  html,body{margin:0;height:100%;background:var(--bg);overflow:hidden;
+    font-family:"Noto Sans TC","PingFang TC","Hiragino Sans",sans-serif;color:var(--ink)}
+  #viewport{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+  #stage{position:relative;flex:none;width:1600px;height:900px;transform-origin:center center;background:#000;overflow:hidden}
+  .slide{position:absolute;inset:0;opacity:0;transition:opacity .45s ease;pointer-events:none}
+  .slide.on{opacity:1;pointer-events:auto}
+  .slide > img.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .slide video.ov{position:absolute;object-fit:cover}
+  .tagai{position:absolute;background:#000;color:#fff;font-size:12px;font-weight:700;padding:4px 10px;border-radius:20px}
+  #bar{position:fixed;left:0;bottom:0;height:4px;background:var(--red);transition:width .3s;z-index:9}
+  #num{position:fixed;right:16px;bottom:12px;font-size:12px;color:#fff;opacity:.6;z-index:9}
+  #hint{position:fixed;left:16px;bottom:12px;font-size:12px;color:#fff;opacity:.7;z-index:10}
+  .nav{position:fixed;top:0;bottom:60px;width:22%;cursor:pointer;z-index:8}
+  #prev{left:0}#next{right:0}
+
+  /* ---------- IDEA（影片背景＋文字） ---------- */
+  .idea video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .idea .txt{position:absolute;left:126px;top:222px;width:720px;color:#fff}
+  .idea .k{color:var(--orange);font-weight:700;font-size:21px;letter-spacing:.06em}
+  .idea h1{margin:18px 0 0;font-size:64px;line-height:1.2}
+  .idea p{color:var(--gold);font-size:22px;line-height:1.85;margin-top:38px}
+
+  /* ---------- Motion DEMO ---------- */
+  .motion{background:#fff}
+  .motion .frame{position:absolute;left:0;top:0;bottom:0;width:11px;background:var(--red);pointer-events:none}
+  .motion h2:before{content:"";display:inline-block;width:0;height:0;border-left:18px solid #00BCD4;border-top:13px solid transparent;border-bottom:13px solid transparent;margin-right:14px;vertical-align:2px}
+  .motion .logos{position:absolute;left:72px;bottom:22px;display:flex;align-items:center;gap:18px}
+  .motion .logos img{height:20px}
+  .motion .pill{position:absolute;left:50px;top:40px;background:var(--red);color:#fff;font-weight:700;font-size:15px;padding:6px 16px;border-radius:20px}
+  .motion h2{position:absolute;left:74px;top:86px;margin:0;font-size:32px}
+  .motion .legend{position:absolute;right:60px;top:44px;display:flex;gap:8px}
+  .motion .legend span{font-size:13px;font-weight:700;padding:5px 12px;color:#fff}
+  .lane{position:absolute;left:74px;right:74px;top:170px;height:440px;display:flex;gap:60px}
+  .card{flex:1;border-radius:14px;padding:12px;display:flex;flex-direction:column;align-items:center;
+    transform:translateY(40px) scale(.96);opacity:.18;transition:all .6s cubic-bezier(.2,.8,.2,1);position:relative}
+  .card.lit{transform:none;opacity:1;box-shadow:0 18px 40px rgba(0,0,0,.18)}
+  .card h3{margin:2px 0 10px;font-size:18px;color:#fff}
+  .card.tc h3,.card.tc .cap{color:#1A1A1A}
+  .card .shot{flex:1;width:100%;background:#fff;border-radius:8px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+  .card .shot img{max-width:100%;max-height:300px;object-fit:contain}
+  .card .cap{color:#fff;font-size:14px;margin-top:10px;text-align:center;line-height:1.4}
+  .card .ripple{position:absolute;width:26px;height:26px;border-radius:50%;border:3px solid var(--orange);opacity:0}
+  .card.tap .ripple{animation:rip 1s ease-out 2}
+  @keyframes rip{0%{transform:scale(.4);opacity:1}100%{transform:scale(3);opacity:0}}
+  .arrow{position:absolute;top:378px;width:44px;height:6px;background:#E6E1E1;border-radius:3px;overflow:hidden}
+  .arrow i{position:absolute;left:-30%;top:0;width:30%;height:100%;background:var(--red);border-radius:3px}
+  .arrow.go i{animation:flow .9s linear infinite}
+  @keyframes flow{to{left:110%}}
+  .token{position:absolute;width:22px;height:22px;border-radius:50%;background:var(--orange);
+    box-shadow:0 0 0 6px rgba(255,132,0,.25),0 0 22px rgba(255,132,0,.9);top:372px;left:150px;opacity:0;
+    transition:left .9s cubic-bezier(.6,0,.3,1),top .7s cubic-bezier(.6,0,.3,1),opacity .3s}
+  .db{position:absolute;left:110px;right:110px;top:650px;height:170px}
+  .db .cyl{position:absolute;inset:0;background:var(--lion);border-radius:50%/26px;overflow:hidden}
+  .db .cyl:before{content:"";position:absolute;left:0;right:0;top:0;height:52px;border-radius:50%;background:#58CDE0}
+  .db .title{position:absolute;left:0;right:0;top:62px;text-align:center;color:#fff;font-weight:700;font-size:20px}
+  .db .stats{position:absolute;left:40px;right:40px;top:98px;display:flex;justify-content:space-around;color:#fff}
+  .db .stat b{display:block;font-size:30px;font-family:"Arial Narrow",sans-serif;letter-spacing:.02em}
+  .db .stat span{font-size:13px;opacity:.9}
+  .chips{position:absolute;left:0;right:0;top:612px;display:flex;justify-content:center;gap:10px}
+  .chip{background:#fff;border:2px solid var(--lion);color:#0E7F93;font-weight:700;font-size:14px;padding:4px 12px;border-radius:16px;
+    transform:translateY(-20px);opacity:0;transition:all .5s}
+  .chip.in{transform:none;opacity:1}
+  #dl{position:fixed;top:14px;right:14px;z-index:20;display:flex;gap:8px;align-items:center;font-family:"Noto Sans TC","PingFang TC",sans-serif}
+  #dl span{color:#fff;background:#0A1F44;font-size:12px;font-weight:700;padding:7px 12px;border-radius:999px}
+  #dl a{font-size:13px;font-weight:700;text-decoration:none;color:#0A1F44;background:#fff;padding:7px 14px;border-radius:999px;box-shadow:0 4px 14px rgba(0,0,0,.25)}
+  #dl a:hover{background:#00BCD4;color:#fff}
+  #dl a.b{background:#00BCD4;color:#fff}
+</style>
+</head>
+<body>
+<div id="dl"><span>下載</span><a href="download/roundtrip-pass.pdf" download="雙程票_雄獅x日本百貨_騰雲提案.pdf">PDF</a><a href="download/roundtrip-pass.pptx" download="雙程票_雄獅x日本百貨_騰雲提案.pptx">PPT</a><a class="b" href="banners.html">Banner 全集</a></div>
+<div id="viewport"><div id="stage"></div></div>
+<div class="nav" id="prev"></div><div class="nav" id="next"></div>
+<div id="bar"></div><div id="num"></div><div id="hint">← → 翻頁｜F 全螢幕｜<a href="banners.html" style="color:#FFD3A3">動態 Banner 全集 →</a></div>
+
+<script>
+const VIDEO = {"21": [["pos.mp4", 0.0450011250281257, 0.21186046511627904, 0.6412660316507913, 0.6362790697674419]], "28": [["standee.mp4", 0.0450011250281257, 0.21186046511627904, 0.6412660316507913, 0.6362790697674419]], "37": [["brand2/bn-clay.mp4", 0.09562739068476714, 0.20666666666666667, 0.34125853146328655, 0.26], ["brand2/bn-tax.mp4", 0.5628890722268057, 0.20666666666666667, 0.34125853146328655, 0.26], ["brand2/bn-tigers.mp4", 0.09562739068476714, 0.5399999999999999, 0.34125853146328655, 0.26], ["brand2/bn-jp.mp4", 0.5628890722268057, 0.5399999999999999, 0.34125853146328655, 0.26]], "38": [["brand2/bn-b1map.mp4", 0.04825120628015699, 0.20666666666666667, 0.2485062126553164, 0.18933333333333333], ["brand2/bn-ticket.mp4", 0.04825120628015699, 0.42266666666666663, 0.2485062126553164, 0.18933333333333333], ["brand2/bn-sakura.mp4", 0.04825120628015699, 0.6386666666666667, 0.2485062126553164, 0.18933333333333333], ["brand2/bn-story.mp4", 0.5512637815945398, 0.20888888888888887, 0.1800045001125028, 0.5688888888888889], ["brand2/bn-square.mp4", 0.7462686567164178, 0.30666666666666664, 0.21000525013125326, 0.3733333333333333]]};
+const img = n => `assets/slides_v12/s-${String(n).padStart(2, '0')}.jpg`;
+const crop = f => `assets/img/${f}`;
+
+const MOTION = {
+  m1: {
+    pill: "MOTION DEMO｜情境① 去程", title: "台灣客：雄獅台灣版 App → T-Space → 日本百貨核銷",
+    cards: [
+      ["雄獅台灣版 App", "lion", "crops/tw-p1.jpg", "首頁 Banner「日本百貨優惠專區」"],
+      ["騰雲 T-Space 活動頁", "tc", "crops/tw-p2.jpg", "70 多家百貨優惠，依地區篩選"],
+      ["優惠券＋LION Pay", "tc", "crops/tw-p3.jpg", "95折＋免稅 QR，一鍵快速退稅"],
+      ["日本百貨 現場核銷", "dept", "demo-pos.jpg", "Mobile POS／APP／立牌掃碼"]],
+    db: "TCRM 顧客360 數據中心",
+    stats: [["App 點擊", 12480, ""], ["T-Space 領券", 3920, ""], ["現場核銷", 1932, ""], ["導購 GMV", 8640, "¥", "萬"]],
+    chips: ["阪急常客", "B1 甜點", "美妝", "虎迷", "春節出發"]
+  },
+  m2: {
+    pill: "MOTION DEMO｜情境② 回程", title: "日本客：百貨官網・立牌 → T-Space → LionTrip 國際版",
+    cards: [
+      ["百貨官網專區", "dept", "crops/jp-site.jpg", "「台湾へ、ふらっと。」會員專區"],
+      ["館內立牌・催事", "dept", "demo-standee.jpg", "服務台立牌、台湾フェア掃碼"],
+      ["騰雲 T-Space 日文頁", "tc", "crops/lt-p1.jpg", "下載 LionTrip 領 ¥3,000"],
+      ["LionTrip 國際版", "lion", "crops/lt-p3.jpg", "日本點券＋線上支付訂行程"]],
+    db: "TCRM 顧客360 數據中心｜百貨熟客 → 雄獅國際會員",
+    stats: [["官網・立牌曝光", 86400, ""], ["掃碼進站", 6210, ""], ["LionTrip 下載", 1480, ""], ["台灣行程訂單", 152, ""]],
+    chips: ["百貨會員", "50 代夫婦", "九份", "鐵道旅", "春假出發"]
+  }
+};
+
+// 頁序：PPTX 渲染頁 1–32，情境流程頁（13、18）後各插一頁 motion，IDEA 頁（8）改為影片背景
+const SLIDES = [];
+for (let n = 1; n <= 53; n++) {
+  SLIDES.push(n === 10 ? {type: "idea"} : {type: "img", n});
+  if (n === 18) SLIDES.push({type: "motion", id: "m1"});
+  if (n === 24) SLIDES.push({type: "motion", id: "m2"});
+}
+
+const stage = document.getElementById('stage');
+const COL = {lion: "var(--lion)", tc: "var(--tc)", dept: "var(--dept)"};
+
+function buildMotion(m) {
+  const el = document.createElement('div');
+  el.className = 'slide motion';
+  const xs = [];
+  el.innerHTML = `<div class="frame"></div><div class="pill">${m.pill}</div><h2>${m.title}</h2>
+    <div class="legend"><span style="background:var(--lion)">雄獅</span><span style="background:var(--tc);color:#1A1A1A">騰雲</span><span style="background:var(--dept)">日本百貨業者</span></div>
+    <div class="lane">${m.cards.map(c => `<div class="card ${c[1]}" style="background:${COL[c[1]]}">
+      <h3>${c[0]}</h3><div class="shot"><img src="${crop(c[2])}" alt=""></div><div class="cap">${c[3]}</div>
+      <div class="ripple" style="left:46%;top:40%"></div></div>`).join('')}</div>
+    ${[0, 1, 2].map(i => `<div class="arrow" style="left:${74 + (i + 1) * 318 + i * 60 + 8}px"><i></i></div>`).join('')}
+    <div class="token"></div>
+    <div class="chips">${m.chips.map(t => `<span class="chip">${t}</span>`).join('')}</div>
+    <div class="db"><div class="cyl"></div><div class="title">${m.db}</div>
+      <div class="stats">${m.stats.map(s => `<div class="stat"><b data-to="${s[1]}" data-pre="${s[2] || ''}" data-suf="${s[3] || ''}">0</b><span>${s[0]}</span></div>`).join('')}</div></div>
+    <div class="logos"><img src="assets/img/brand/turncloud.png"><img src="assets/img/brand/accucrazy-dark.png" style="height:13px"><img src="assets/img/brand/lion.png"></div><div class="tagai" style="right:40px;bottom:22px">AI 示意圖・數字為示意</div>`;
+  return el;
+}
+
+function countUp(b, ms) {
+  const to = +b.dataset.to, pre = b.dataset.pre, suf = b.dataset.suf, t0 = performance.now();
+  const step = t => {
+    const k = Math.max(0, Math.min(1, (t - t0) / ms)), v = Math.round(to * (1 - Math.pow(1 - k, 3)));
+    b.textContent = pre + v.toLocaleString() + suf;
+    if (k < 1 && b.isConnected) b._raf = requestAnimationFrame(step);
+  };
+  b._raf = requestAnimationFrame(step);
+}
+
+let timers = [];
+function clearTimers() { timers.forEach(clearTimeout); timers = []; }
+function at(ms, fn) { timers.push(setTimeout(fn, ms)); }
+
+function playMotion(el) {
+  clearTimers();
+  const cards = [...el.querySelectorAll('.card')], arrows = [...el.querySelectorAll('.arrow')];
+  const token = el.querySelector('.token'), chips = [...el.querySelectorAll('.chip')];
+  const stats = [...el.querySelectorAll('.stat b')];
+  cards.forEach(c => c.classList.remove('lit', 'tap')); arrows.forEach(a => a.classList.remove('go'));
+  chips.forEach(c => c.classList.remove('in')); stats.forEach(b => b.textContent = b.dataset.pre + '0' + b.dataset.suf);
+  token.style.transition = 'none'; token.style.opacity = 0; token.style.left = '190px'; token.style.top = '372px';
+  const cx = i => 74 + i * 378 + 159;
+  cards.forEach((c, i) => {
+    at(300 + i * 1500, () => {
+      c.classList.add('lit');
+      if (i === 0) c.classList.add('tap');
+      token.style.transition = ''; token.style.opacity = 1; token.style.left = (cx(i) - 11) + 'px';
+      countUp(stats[i], 1300);
+      if (i > 0) arrows[i - 1].classList.add('go');
+    });
+  });
+  at(300 + 4 * 1500, () => { token.style.top = '700px'; token.style.left = '789px'; });
+  chips.forEach((c, i) => at(300 + 4 * 1500 + 400 + i * 260, () => c.classList.add('in')));
+  at(300 + 4 * 1500 + 1200, () => { token.style.opacity = 0; });
+  at(13500, () => playMotion(el));
+}
+
+const els = SLIDES.map(sd => {
+  let el;
+  if (sd.type === 'img') {
+    el = document.createElement('div'); el.className = 'slide';
+    el.innerHTML = `<img class="bg" src="${img(sd.n)}" alt="" loading="lazy">`;
+    (VIDEO[sd.n] || []).forEach(v => {
+      if (v[5] === 'crop') {
+        el.innerHTML += `<div style="position:absolute;left:${v[1]*100}%;top:0;width:${v[3]*100}%;height:100%;overflow:hidden">
+          <video class="ov" src="assets/video/${v[0]}" muted loop playsinline preload="none"
+            style="left:${-v[1]/v[3]*100}%;top:0;width:${100/v[3]}%;height:100%"></video></div>`;
+      } else {
+        el.innerHTML += `<video class="ov" src="assets/video/${v[0]}" muted loop playsinline preload="none"
+          style="left:${v[1]*100}%;top:${v[2]*100}%;width:${v[3]*100}%;height:${v[4]*100}%"></video>`;
+      }
+    });
+  } else if (sd.type === 'idea') {
+    el = document.createElement('div'); el.className = 'slide idea';
+    el.innerHTML = `<video src="assets/video/planes.mp4" muted loop playsinline preload="none" poster="assets/img/idea-bg.jpg"></video>
+      <div class="txt"><div class="k">IDEA</div><h1>雙程票<br>Round Trip Pass</h1>
+      <p>一張票，兩個方向。<br>去程：台灣客從雄獅 App 走進日本百貨。<br>回程：百貨的日本熟客走進雄獅國際版。<br>騰雲 T-Space 記下每一次進出，按成果分潤。</p></div>`;
+  } else {
+    el = buildMotion(MOTION[sd.id]);
+  }
+  stage.appendChild(el);
+  return el;
+});
+
+let i = Math.min(SLIDES.length, Math.max(1, parseInt(location.hash.slice(1)) || 1));
+function show(n) {
+  const prev = els[i - 1];
+  prev.querySelectorAll('video').forEach(v => v.pause());
+  prev.classList.remove('on');
+  i = Math.min(SLIDES.length, Math.max(1, n));
+  const el = els[i - 1];
+  el.classList.add('on');
+  el.querySelectorAll('img[loading]').forEach(im => im.loading = 'eager');
+  el.querySelectorAll('video').forEach(v => { v.currentTime = 0; v.play().catch(() => {}); });
+  clearTimers();
+  if (el.classList.contains('motion')) playMotion(el);
+  document.getElementById('num').textContent = `${i} / ${SLIDES.length}`;
+  document.getElementById('bar').style.width = `${i / SLIDES.length * 100}%`;
+  history.replaceState(null, '', `#${i}`);
+  [i, i + 1].forEach(k => { const e = els[k]; if (e) e.querySelectorAll('img[loading]').forEach(im => im.loading = 'eager'); });
+}
+function fitStage() {
+  const s = Math.min(innerWidth / 1600, innerHeight / 900);
+  stage.style.transform = `scale(${s})`;
+}
+addEventListener('resize', fitStage); fitStage();
+document.addEventListener('keydown', e => {
+  if (['ArrowRight', 'PageDown', ' '].includes(e.key)) show(i + 1);
+  if (['ArrowLeft', 'PageUp'].includes(e.key)) show(i - 1);
+  if (e.key === 'f' || e.key === 'F')
+    document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen();
+});
+document.getElementById('prev').onclick = () => show(i - 1);
+document.getElementById('next').onclick = () => show(i + 1);
+let x0 = null;
+document.addEventListener('touchstart', e => x0 = e.touches[0].clientX);
+document.addEventListener('touchend', e => {
+  if (x0 === null) return;
+  const dx = e.changedTouches[0].clientX - x0;
+  if (Math.abs(dx) > 40) show(i + (dx < 0 ? 1 : -1));
+  x0 = null;
+});
+els[0].classList.add('on'); show(i);
+</script>
+</body>
+</html>
